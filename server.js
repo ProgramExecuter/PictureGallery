@@ -18,6 +18,9 @@ mongoose
   .then(() => console.log("Connected to DB"))
   .catch((err) => console.log("DB CONNECTION ERROR\n", err));
 
+// Parse JSON from requests
+app.use(express.json());
+
 // Attach API routes(Version 1)
 app.use("/api/v1", apiRoutes);
 
