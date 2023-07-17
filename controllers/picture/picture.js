@@ -1,4 +1,5 @@
 import Picture from "../../models/pictureModel.js";
+import User from "../../models/userModel.js";
 
 const getAllPictures = async (req, res) => {
   try {
@@ -14,9 +15,16 @@ const getAllPictures = async (req, res) => {
   }
 };
 
+// Adds a new picture to DB
 const addPicture = async (req, res) => {
   try {
     const newPic = new Picture(req.body);
+
+    // Check is the author exists
+    const author = await User.find({ username: req.body.username });
+    if (author.length == 0) throw Error("Author doesn't exist");
+
+    // Save the picture
     await newPic.save();
 
     return res
@@ -27,4 +35,20 @@ const addPicture = async (req, res) => {
   }
 };
 
-export { getAllPictures, addPicture };
+// Get a particular picture
+const getParticularPicture = async (req, res) => {
+  try {
+    const foundPicture = Picture.findById(req.params.pictureId);
+
+    // Picture not found
+    if (!foundPicture) throw Error();
+
+    return res.status(200).json({ success: true, picture: foundPicture });
+  } catch (err) {
+    return res
+      .status(404)
+      .json({ success: false, message: "Picture not found" });
+  }
+};
+
+export { getAllPictures, addPicture, getParticularPicture };
