@@ -8,6 +8,7 @@ const pictureSchema = mongoose.Schema({
     maxLength: [30, "Title should be of maximum 30 length"],
   },
   picUrl: { type: String, required: true },
+  username: { type: String, required: [true, "Owner of picture is required"] },
 });
 
 export default mongoose.model("Picture", pictureSchema);
